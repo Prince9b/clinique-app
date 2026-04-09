@@ -41,7 +41,6 @@ export default function Barremenu() {
                     {/* Page content here */}
                     <div className="p-4">Page Content</div>
                 </div>
-
                 <div className="drawer-side is-drawer-close:overflow-visible">
                     <label
                         htmlFor="my-drawer-4"

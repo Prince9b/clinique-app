@@ -21,6 +21,6 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./dockerfile  # <--- Vérifie bien si ton fichier est 'Dockerfile' ou 'dockerfile'
+          file: ./dockerfile  # <--- Vérifie bien
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/clinique-app:latest

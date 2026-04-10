@@ -1,21 +1,38 @@
 # =========================
-# 1. STAGE BUILDER (PHP + NODE)
+# 1. STAGE BUILDER (FULL ENVIRONMENT)
 # =========================
 FROM php:8.4-fpm-alpine AS assets-builder
 
-# Installation de Node et NPM sur Alpine (nécessaire pour le plugin Wayfinder)
-RUN apk add --no-cache nodejs npm
+# Installer Node, NPM et les outils de build pour les extensions PHP
+RUN apk add --no-cache nodejs npm icu-dev libpq-dev libzip-dev zip unzip git
+
+# Installer les extensions PHP indispensables pour que Artisan fonctionne
+RUN docker-php-ext-install pdo_pgsql pgsql zip
+
+# Installer Composer pour installer les dépendances PHP nécessaires au build
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
+
+# 1. Installer les dépendances JS
 COPY package*.json ./
 RUN npm install
 
-# On copie TOUT car Wayfinder a besoin d'accéder aux classes PHP pour générer les types
+# 2. Installer les dépendances PHP (Nécessaire pour Wayfinder)
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --no-scripts --no-autoloader
+
+# 3. Copier le reste du projet et générer l'autoloader
 COPY . .
+RUN composer dump-autoload --no-dev
+
+# 4. ENFIN, Build Vite
+# Maintenant Artisan a tout ce qu'il faut (extensions + vendor)
 RUN npm run build
 
+
 # =========================
-# 2. STAGE PHP (PRODUCTION)
+# 2. STAGE PHP (IMAGE FINALE - DEBIAN)
 # =========================
 FROM php:8.4-fpm
 
@@ -25,21 +42,17 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /var/www
 
-# Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Dépendances PHP
+# On ré-installe proprement pour l'image finale
 COPY composer.json composer.lock ./
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-# Copie du code source
 COPY . .
 
-# RÉCUPÉRATION DES ASSETS (C'est ici qu'on règle ton problème)
-# On récupère le dossier généré dans le stage builder
+# On récupère les assets buildés du stage 1
 COPY --from=assets-builder /app/public/build ./public/build
 
-# Optimisations et Permissions
 RUN composer dump-autoload --optimize \
     && chown -R www-data:www-data /var/www \
     && chmod -R 775 storage bootstrap/cache \

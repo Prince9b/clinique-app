@@ -1,0 +1,184 @@
+{
+  "_barremenu-ERuJc3Jq.js": {
+    "file": "assets/barremenu-ERuJc3Jq.js",
+    "name": "barremenu",
+    "imports": [
+      "_react-WNQdgQBd.js",
+      "_dist-CYMl3V2v.js",
+      "_jsx-runtime-CHp0-VS7.js"
+    ]
+  },
+  "_dist-CYMl3V2v.js": {
+    "file": "assets/dist-CYMl3V2v.js",
+    "name": "dist",
+    "imports": [
+      "_react-WNQdgQBd.js"
+    ]
+  },
+  "_footer-D0zysznq.js": {
+    "file": "assets/footer-D0zysznq.js",
+    "name": "footer",
+    "imports": [
+      "_react-WNQdgQBd.js",
+      "_dist-CYMl3V2v.js",
+      "_jsx-runtime-CHp0-VS7.js"
+    ]
+  },
+  "_jsx-runtime-CHp0-VS7.js": {
+    "file": "assets/jsx-runtime-CHp0-VS7.js",
+    "name": "jsx-runtime",
+    "imports": [
+      "_react-WNQdgQBd.js"
+    ]
+  },
+  "_magic-card-ytFSi2V0.js": {
+    "file": "assets/magic-card-ytFSi2V0.js",
+    "name": "magic-card",
+    "imports": [
+      "_react-WNQdgQBd.js",
+      "_dist-CYMl3V2v.js",
+      "_proxy-Dvhqmd2z.js",
+      "_jsx-runtime-CHp0-VS7.js"
+    ]
+  },
+  "_proxy-Dvhqmd2z.js": {
+    "file": "assets/proxy-Dvhqmd2z.js",
+    "name": "proxy",
+    "imports": [
+      "_react-WNQdgQBd.js",
+      "_jsx-runtime-CHp0-VS7.js"
+    ]
+  },
+  "_react-WNQdgQBd.js": {
+    "file": "assets/react-WNQdgQBd.js",
+    "name": "react"
+  },
+  "node_modules/@fontsource-variable/geist/files/geist-cyrillic-wght-normal.woff2": {
+    "file": "assets/geist-cyrillic-wght-normal-CHSlOQsW.woff2",
+    "src": "node_modules/@fontsource-variable/geist/files/geist-cyrillic-wght-normal.woff2"
+  },
+  "node_modules/@fontsource-variable/geist/files/geist-latin-ext-wght-normal.woff2": {
+    "file": "assets/geist-latin-ext-wght-normal-DMtmJ5ZE.woff2",
+    "src": "node_modules/@fontsource-variable/geist/files/geist-latin-ext-wght-normal.woff2"
+  },
+  "node_modules/@fontsource-variable/geist/files/geist-latin-wght-normal.woff2": {
+    "file": "assets/geist-latin-wght-normal-Dm3htQBi.woff2",
+    "src": "node_modules/@fontsource-variable/geist/files/geist-latin-wght-normal.woff2"
+  },
+  "resources/css/app.css": {
+    "file": "assets/app-Dn5ahXoW.css",
+    "name": "app",
+    "names": [
+      "app.css"
+    ],
+    "src": "resources/css/app.css",
+    "isEntry": true,
+    "assets": [
+      "assets/geist-cyrillic-wght-normal-CHSlOQsW.woff2",
+      "assets/geist-latin-ext-wght-normal-DMtmJ5ZE.woff2",
+      "assets/geist-latin-wght-normal-Dm3htQBi.woff2"
+    ]
+  },
+  "resources/js/app.tsx": {
+    "file": "assets/app-Dvt_-zhB.js",
+    "name": "app",
+    "src": "resources/js/app.tsx",
+    "isEntry": true,
+    "imports": [
+      "_dist-CYMl3V2v.js"
+    ],
+    "dynamicImports": [
+      "resources/js/pages/Auth/login.jsx",
+      "resources/js/pages/Auth/register.jsx",
+      "resources/js/pages/Map/index.jsx",
+      "resources/js/pages/Map/map.jsx",
+      "resources/js/pages/Patients/index.jsx",
+      "resources/js/pages/admin.jsx",
+      "resources/js/pages/welcome.tsx"
+    ]
+  },
+  "resources/js/pages/Auth/login.jsx": {
+    "file": "assets/login-DqHl6oSE.js",
+    "name": "login",
+    "src": "resources/js/pages/Auth/login.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_react-WNQdgQBd.js",
+      "_dist-CYMl3V2v.js",
+      "_magic-card-ytFSi2V0.js",
+      "_jsx-runtime-CHp0-VS7.js"
+    ]
+  },
+  "resources/js/pages/Auth/register.jsx": {
+    "file": "assets/register-BiLq7SuZ.js",
+    "name": "register",
+    "src": "resources/js/pages/Auth/register.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_react-WNQdgQBd.js",
+      "_dist-CYMl3V2v.js",
+      "_magic-card-ytFSi2V0.js",
+      "_jsx-runtime-CHp0-VS7.js"
+    ]
+  },
+  "resources/js/pages/Map/index.jsx": {
+    "file": "assets/Map-BOwP87qu.js",
+    "name": "Map",
+    "src": "resources/js/pages/Map/index.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_react-WNQdgQBd.js",
+      "resources/js/pages/Map/map.jsx",
+      "_jsx-runtime-CHp0-VS7.js",
+      "_footer-D0zysznq.js"
+    ]
+  },
+  "resources/js/pages/Map/map.jsx": {
+    "file": "assets/map-8TyZGop4.js",
+    "name": "map",
+    "src": "resources/js/pages/Map/map.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_react-WNQdgQBd.js",
+      "_jsx-runtime-CHp0-VS7.js"
+    ],
+    "css": [
+      "assets/map-c_1sG1-7.css"
+    ]
+  },
+  "resources/js/pages/Patients/index.jsx": {
+    "file": "assets/Patients-3y2wYLhN.js",
+    "name": "Patients",
+    "src": "resources/js/pages/Patients/index.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_react-WNQdgQBd.js",
+      "_jsx-runtime-CHp0-VS7.js",
+      "_barremenu-ERuJc3Jq.js"
+    ]
+  },
+  "resources/js/pages/admin.jsx": {
+    "file": "assets/admin-Y9wBJqbI.js",
+    "name": "admin",
+    "src": "resources/js/pages/admin.jsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_react-WNQdgQBd.js",
+      "_jsx-runtime-CHp0-VS7.js",
+      "_barremenu-ERuJc3Jq.js"
+    ]
+  },
+  "resources/js/pages/welcome.tsx": {
+    "file": "assets/welcome-DhI7_m3M.js",
+    "name": "welcome",
+    "src": "resources/js/pages/welcome.tsx",
+    "isDynamicEntry": true,
+    "imports": [
+      "_react-WNQdgQBd.js",
+      "_dist-CYMl3V2v.js",
+      "_proxy-Dvhqmd2z.js",
+      "_jsx-runtime-CHp0-VS7.js",
+      "_footer-D0zysznq.js"
+    ]
+  }
+}

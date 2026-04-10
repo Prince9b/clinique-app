@@ -2,14 +2,24 @@
 FROM node:22-alpine AS assets-builder
 WORKDIR /app
 
-# Installer PHP pour le plugin wayfinder
-RUN apk add --no-cache php83 php83-phar php83-mbstring php83-openssl \
+# Installer PHP et Composer pour le plugin wayfinder
+RUN apk add --no-cache php83 php83-phar php83-mbstring php83-openssl php83-tokenizer php83-xml php83-dom php83-xmlwriter php83-ctype php83-json \
     && ln -s /usr/bin/php83 /usr/bin/php
 
+# Installer Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Installer les dépendances PHP
+COPY composer.json composer.lock ./
+RUN composer install --no-dev --no-scripts --no-autoloader --ignore-platform-reqs
+
+COPY . .
+RUN composer dump-autoload --no-scripts --ignore-platform-reqs
+
+# Installer les dépendances Node et builder
 COPY package*.json ./
 COPY .npmrc ./
 RUN npm install --ignore-scripts=false
-COPY . .
 RUN npm run build
 
 # Étape 2 : Image PHP finale

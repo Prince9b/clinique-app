@@ -2,10 +2,9 @@
 FROM node:22-alpine AS assets-builder
 WORKDIR /app
 COPY package*.json ./
-# On installe les dépendances
-RUN npm install
+COPY .npmrc ./
+RUN npm install --ignore-scripts=false
 COPY . .
-# On tente le build, mais on ne bloque pas si ça échoue (le "|| true")
 RUN npm run build
 
 # Étape 2 : Image PHP finale

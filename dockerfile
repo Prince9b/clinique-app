@@ -6,7 +6,7 @@ COPY package*.json ./
 RUN npm install
 COPY . .
 # On tente le build, mais on ne bloque pas si ça échoue (le "|| true")
-RUN npm run build || echo "Build npm ignoré ou échoué"
+RUN npm run build
 
 # Étape 2 : Image PHP finale
 FROM php:8.4-fpm

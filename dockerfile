@@ -21,59 +21,41 @@ RUN npm run build
 # =========================================================
 # STAGE 2 : RUNTIME (PHP 8.4)
 # =========================================================
+# STAGE 2 : RUNTIME (PHP 8.4)
+# =========================================================
 FROM php:8.4-fpm
 
-# Installation des dépendances système nécessaires à Laravel et PostgreSQL
+# ... (garder l'installation des dépendances système libpng, libpq, etc.)
 RUN apt-get update && apt-get install -y \
-    libpng-dev \
-    libpq-dev \
-    libzip-dev \
-    zip \
-    unzip \
-    git \
-    curl \
-    postgresql-client \
-    && docker-php-ext-install \
-    pdo_pgsql \
-    pgsql \
-    zip \
-    bcmath \
-    pcntl \
-    exif
+    libpng-dev libpq-dev libzip-dev zip unzip git curl postgresql-client \
+    && docker-php-ext-install pdo_pgsql pgsql zip bcmath pcntl exif
 
 WORKDIR /var/www
 
-# Installation de Composer (récupéré depuis l'image officielle)
+# Installation de Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Installation des dépendances PHP (Vendor)
-COPY composer.json composer.lock ./
-RUN composer install --no-dev --optimize-autoloader --no-interaction
-
-# Copie de tout le code source de l'application
+# --- FIX ICI ---
+# 1. On copie d'abord TOUT le code (y compris le fichier artisan)
 COPY . .
 
-# RÉCUPÉRATION DES ASSETS COMPILÉS (Correction du bug Manifest)
-# On récupère le dossier public/build généré dans le STAGE 1
+# 2. Maintenant on peut installer les dépendances PHP sans erreur
+RUN composer install --no-dev --optimize-autoloader --no-interaction
+
+# 3. On récupère les assets compilés du stage précédent
 COPY --from=assets-builder /app/public/build ./public/build
+# ---------------
 
-# Optimisation finale de l'autoloader Composer
-RUN composer dump-autoload --optimize
-
-# Configuration des permissions pour Laravel (indispensable pour storage/cache)
+# Configuration des permissions
 RUN chown -R www-data:www-data /var/www \
     && chmod -R 775 storage bootstrap/cache
 
-# Nettoyage des fichiers temporaires pour alléger l'image
+# Nettoyage
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Gestion de l'Entrypoint
 COPY docker-entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
-
-# Exposition du port PHP-FPM
 EXPOSE 9000
-
 CMD ["php-fpm"]

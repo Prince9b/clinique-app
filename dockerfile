@@ -1,84 +1,52 @@
 # =========================
-# 1. STAGE NODE (ASSETS VITE)
+# 1. STAGE BUILDER (PHP + NODE)
 # =========================
-FROM node:22-alpine AS assets-builder
+FROM php:8.4-fpm-alpine AS assets-builder
+
+# Installation de Node et NPM sur Alpine (nécessaire pour le plugin Wayfinder)
+RUN apk add --no-cache nodejs npm
 
 WORKDIR /app
-
-# Copier uniquement dépendances Node
 COPY package*.json ./
 RUN npm install
 
-# Copier le reste du projet
+# On copie TOUT car Wayfinder a besoin d'accéder aux classes PHP pour générer les types
 COPY . .
-
-# Build Vite (CRÉE public/build/manifest.json)
 RUN npm run build
 
-
 # =========================
-# 2. STAGE PHP (BACKEND)
+# 2. STAGE PHP (PRODUCTION)
 # =========================
 FROM php:8.4-fpm
 
-# Installer dépendances système
 RUN apt-get update && apt-get install -y \
-    libpng-dev \
-    libpq-dev \
-    libzip-dev \
-    zip \
-    unzip \
-    git \
-    curl \
-    postgresql-client \
-    && docker-php-ext-install \
-    pdo_pgsql \
-    pgsql \
-    zip \
-    bcmath \
-    pcntl \
-    exif
+    libpng-dev libpq-dev libzip-dev zip unzip git curl postgresql-client \
+    && docker-php-ext-install pdo_pgsql pgsql zip bcmath pcntl exif
 
 WORKDIR /var/www
 
-# Installer Composer
+# Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# =========================
-# INSTALL DEPENDANCES PHP
-# =========================
+# Dépendances PHP
 COPY composer.json composer.lock ./
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
-# =========================
-# COPIE DU CODE
-# =========================
+# Copie du code source
 COPY . .
 
-# =========================
-# COPIE DES ASSETS VITE BUILDÉS
-# (IMPORTANT FIX)
-# =========================
+# RÉCUPÉRATION DES ASSETS (C'est ici qu'on règle ton problème)
+# On récupère le dossier généré dans le stage builder
 COPY --from=assets-builder /app/public/build ./public/build
 
-# =========================
-# FINAL OPTIMIZATION
-# =========================
-RUN composer dump-autoload --optimize
+# Optimisations et Permissions
+RUN composer dump-autoload --optimize \
+    && chown -R www-data:www-data /var/www \
+    && chmod -R 775 storage bootstrap/cache \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Permissions Laravel
-RUN chown -R www-data:www-data /var/www \
-    && chmod -R 775 storage bootstrap/cache
-
-# Nettoyage
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# =========================
-# ENTRYPOINT
-# =========================
 COPY docker-entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
-
 CMD ["php-fpm"]

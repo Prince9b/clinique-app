@@ -1,6 +1,11 @@
 # Étape 1 : Compilation des assets (JS/CSS)
 FROM node:22-alpine AS assets-builder
 WORKDIR /app
+
+# Installer PHP pour le plugin wayfinder
+RUN apk add --no-cache php83 php83-phar php83-mbstring php83-openssl \
+    && ln -s /usr/bin/php83 /usr/bin/php
+
 COPY package*.json ./
 COPY .npmrc ./
 RUN npm install --ignore-scripts=false
